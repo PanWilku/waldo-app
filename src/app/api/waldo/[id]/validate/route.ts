@@ -1,5 +1,8 @@
 // app/api/waldo/[id]/route.ts
 import { NextResponse } from "next/server";
+import { PrismaClient } from "@db/prisma/generated/prisma";
+
+const prisma = new PrismaClient();
 
 export async function POST(
   request: Request,

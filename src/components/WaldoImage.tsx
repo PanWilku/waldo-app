@@ -6,7 +6,11 @@ import { useRef, useState } from "react";
 interface WaldoImageProps {
   src: string;
   alt: string;
-  onCoordinateClick?: (x: number, y: number) => void;
+  onCoordinateClick?: (
+    x: number,
+    y: number,
+    dimensions: { width: number; height: number }
+  ) => void;
 }
 
 export default function WaldoImage({
@@ -84,7 +88,7 @@ export default function WaldoImage({
       );
 
       // Call the parent callback with original coordinates
-      onCoordinateClick?.(originalX, originalY);
+      onCoordinateClick?.(originalX, originalY, trueDimensions);
     }
   };
 
