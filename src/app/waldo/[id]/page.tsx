@@ -2,12 +2,16 @@
 
 import WaldoImage from "@/components/WaldoImage";
 import GameHeader from "@/components/GameHeader";
+import TemporaryMessage from "@/components/TemporaryMessage";
+import SuccessDialog from "@/components/SuccessDialog";
 import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
+import { WaldoGameProvider } from "@/contexts/WaldoGameContext";
 
-export default function WaldoChallenge() {
+function WaldoGameContent() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const id = params.id as string;
   const title = searchParams.get("title") || "Waldo Challenge";
@@ -15,32 +19,54 @@ export default function WaldoChallenge() {
 
   console.log("Received data:", { id, title, imageUrl });
 
+  const handleRetry = () => {
+    // Refresh the current page to restart the game
+    router.refresh();
+  };
+
+  const handleMenu = () => {
+    // Navigate back to home
+    router.push("/");
+  };
+
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
+    <div className="container flex flex-col h-screen">
+      {/* Temporary Message Display */}
+      <TemporaryMessage />
+
       {/* Header with Back Button */}
-      <div className="flex justify-between items-center py-6 px-6">
+      <div className="flex px-6 py-6 items-center justify-center">
         <Link
           href="/"
-          className="px-4 py-2 bg-gradient-to-r from-rose-500 to-rose-400 rounded-lg shadow-lg hover:shadow-xl hover:from-rose-400 hover:to-rose-300 transition-all duration-200 text-white font-medium flex-shrink-0"
+          className="px-6 py-3 bg-gradient-to-r from-rose-500 to-rose-400 rounded-lg shadow-lg hover:shadow-xl hover:from-rose-400 hover:to-rose-300 transition-all duration-200 text-white font-medium flex-shrink-0"
         >
           ← Back to Home
         </Link>
-        <div className="absolute left-1/2 transform -translate-x-1/2">
-          <GameHeader
-            title="Welcome to Waldo"
-            subtitle="Find Waldo in the image below!"
-          />
+        <div className="flex-1 flex justify-center">
+          <GameHeader title={title} subtitle="Find Waldo in the image below!" />
         </div>
-        <div className="w-32 flex-shrink-0"></div>{" "}
-        {/* Spacer to balance the back button */}
+        <div className="w-32 flex-shrink-0"></div>
       </div>
 
-      {/* Game Area */}
-      <div className="flex-1 flex justify-center items-center p-6">
+      {/* Game Area with Success Dialog Overlay */}
+      <div className="flex-1 flex justify-center items-center p-6 relative">
         <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-2xl shadow-rose-500/10 max-w-6xl max-h-full">
           <WaldoImage src={imageUrl} alt={title} waldoId={id} />
         </div>
+
+        {/* Success Dialog positioned over the game */}
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-50">
+          <SuccessDialog onRetry={handleRetry} onMenu={handleMenu} />
+        </div>
       </div>
     </div>
+  );
+}
+
+export default function WaldoChallenge() {
+  return (
+    <WaldoGameProvider>
+      <WaldoGameContent />
+    </WaldoGameProvider>
   );
 }

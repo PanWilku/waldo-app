@@ -6,16 +6,53 @@ const prisma = new PrismaClient();
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params; // dynamic segment from URL
-  const body = await request.json(); // { x, y, ...dimensions }
+  const body = await request.json();
+  const { x, y, width, height } = body;
+  const { id } = await params;
 
-  console.log("Waldo check:", { id, body });
+  console.log("Waldo check:", { id, x, y, width, height });
 
-  //logic here
+  const waldoImageRecord = await prisma.waldoImage.findUnique({
+    where: { id: Number(id) },
+    select: { waldoSpots: true },
+  });
 
-  const found = { x: body.x, y: body.y };
+  // Handle case where image is not found
+  if (!waldoImageRecord) {
+    return NextResponse.json(
+      {
+        found: false,
+        error: "Waldo image not found",
+      },
+      { status: 404 }
+    );
+  }
 
-  return NextResponse.json({ found });
+  const waldoSpots = waldoImageRecord.waldoSpots as Record<
+    string,
+    {
+      x: [number, number];
+      y: [number, number];
+    }
+  >;
+  console.log("Waldo spots from DB:", waldoSpots);
+
+  // Check if (x, y) is within any of the waldoSpots
+  for (const [spotKey, spot] of Object.entries(waldoSpots)) {
+    console.log(`Checking spot ${spotKey}:`, spot);
+
+    // Additional null check for the spot
+    if (!spot || !spot.x || !spot.y) continue;
+
+    if (x >= spot.x[0] && x <= spot.x[1] && y >= spot.y[0] && y <= spot.y[1]) {
+      const found = { message: `You found Waldo!`, score: 1 };
+      console.log(found);
+      return NextResponse.json({ found });
+    }
+  }
+
+  // If no spots match, Waldo was not found
+  return NextResponse.json({ found: false });
 }

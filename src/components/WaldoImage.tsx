@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import { useWaldoGame } from "@/contexts/WaldoGameContext";
 
 interface WaldoImageProps {
   src: string;
@@ -11,6 +12,12 @@ interface WaldoImageProps {
 
 export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
   const imageRef = useRef<HTMLImageElement>(null);
+  const {
+    showTemporaryMessage,
+    setGameCompleted,
+    gameCompleted,
+    setOnResetCircles,
+  } = useWaldoGame();
   const [trueDimensions, setTrueDimensions] = useState<{
     width: number;
     height: number;
@@ -18,7 +25,23 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
   const [wrongClickPositions, setWrongClickPositions] = useState<
     Array<{ x: number; y: number; id: string }>
   >([]);
+  const [foundClickPositions, setFoundClickPositions] = useState<
+    Array<{ x: number; y: number; id: string }>
+  >([]);
+
   const [isLoading, setIsLoading] = useState(false);
+
+  // Reset circles when game is reset
+  const resetCircles = () => {
+    setWrongClickPositions([]);
+    setFoundClickPositions([]);
+    setIsLoading(false);
+  };
+
+  // Register reset function with context
+  useEffect(() => {
+    setOnResetCircles(() => resetCircles);
+  }, [setOnResetCircles]);
 
   // Debug: log when wrongClickPositions changes
   console.log("Current click positions:", wrongClickPositions);
@@ -36,7 +59,8 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
   };
 
   const handleClick = async (event: React.MouseEvent<HTMLImageElement>) => {
-    if (!imageRef.current || !trueDimensions || isLoading) return;
+    if (!imageRef.current || !trueDimensions || isLoading || gameCompleted)
+      return;
 
     setIsLoading(true);
 
@@ -56,17 +80,6 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
     // Console log the click
     console.log(`🎯 Clicked at display: (${displayClickX}, ${displayClickY})`);
     console.log(`🎯 Original coordinates: (${originalX}, ${originalY})`);
-
-    // Always show a red circle first for debugging
-    const clickId = `click-${Date.now()}-${Math.random()}`;
-    setWrongClickPositions((prev) => [
-      ...prev,
-      {
-        x: displayClickX,
-        y: displayClickY,
-        id: clickId,
-      },
-    ]);
 
     console.log("🔴 Red circle added at:", displayClickX, displayClickY);
 
@@ -88,14 +101,35 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
 
       if (data.found) {
         console.log("🎉 Waldo found!");
-        // add logic when waldo found
+        setGameCompleted(true);
+        // Add green circle for successful finds
+        const clickId = `click-${Date.now()}-${Math.random()}`;
+        setFoundClickPositions((prev) => [
+          ...prev,
+          {
+            x: displayClickX,
+            y: displayClickY,
+            id: clickId,
+          },
+        ]);
       } else {
-        console.log("❌ Waldo not found. Try again!");
+        // Always show a red circle first for debugging
+        const clickId = `click-${Date.now()}-${Math.random()}`;
+        setWrongClickPositions((prev) => [
+          ...prev,
+          {
+            x: displayClickX,
+            y: displayClickY,
+            id: clickId,
+          },
+        ]);
+        showTemporaryMessage("❌ Waldo is not here. Keep looking!");
         // Keep the red circle permanently for wrong clicks
       }
     } catch (error) {
       console.error("Error validating click:", error);
       console.log("❌ API error, keeping red circle");
+      showTemporaryMessage("❌ Something went wrong. Please try again.");
       // Keep the red circle permanently for API errors
     } finally {
       setIsLoading(false);
@@ -113,7 +147,9 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
           alt={alt}
           width={800}
           height={600}
-          className={`max-w-full max-h-full object-contain cursor-pointer`}
+          className={`max-w-full max-h-full object-contain ${
+            gameCompleted ? "cursor-not-allowed opacity-75" : "cursor-pointer"
+          }`}
           priority
         />
 
@@ -123,7 +159,7 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
             key={position.id}
             className="absolute pointer-events-none z-50"
             style={{
-              left: position.x - 25, // Center the circle (60px diameter / 2)
+              left: position.x - 25,
               top: position.y - 25,
               width: "50px",
               height: "50px",
@@ -137,14 +173,26 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
             <div className="absolute inset-0 border-4 border-red-400 rounded-full"></div>
           </div>
         ))}
-      </div>
 
-      <div>
-        {wrongClickPositions.length > 0 && (
-          <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
-            Circles: {wrongClickPositions.length}
+        {foundClickPositions.map((position) => (
+          <div
+            key={position.id}
+            className="absolute pointer-events-none z-50"
+            style={{
+              left: position.x - 25,
+              top: position.y - 25,
+              width: "50px",
+              height: "50px",
+            }}
+          >
+            {/* Animated pulse circle */}
+            <div className="w-full h-full bg-green-500 rounded-full opacity-90"></div>
+            {/* Static filled circle */}
+            <div className="absolute inset-2 bg-green-600 rounded-full opacity-60"></div>
+            {/* Border circle */}
+            <div className="absolute inset-0 border-4 border-green-400 rounded-full"></div>
           </div>
-        )}
+        ))}
       </div>
     </>
   );
