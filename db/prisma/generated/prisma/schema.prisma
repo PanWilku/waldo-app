@@ -17,6 +17,7 @@ datasource db {
 model WaldoImage {
   id         Int      @id @default(autoincrement())
   url        String
+  title      String   @default("untitled")
   createdAt  DateTime @default(now())
   waldoSpots Json
 }

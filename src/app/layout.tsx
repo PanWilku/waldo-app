@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} flex antialiased bg-emerald-100 justify-center`}
+        className={`${geistSans.variable} ${geistMono.variable} flex antialiased bg-gray-900 justify-center`}
       >
         <ScreenSizeGuard>{children}</ScreenSizeGuard>
       </body>

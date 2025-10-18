@@ -123,6 +123,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.WaldoImageScalarFieldEnum = {
   id: 'id',
   url: 'url',
+  title: 'title',
   createdAt: 'createdAt',
   waldoSpots: 'waldoSpots'
 };
