@@ -15,28 +15,6 @@ export default function WaldoChallenge() {
 
   console.log("Received data:", { id, title, imageUrl });
 
-  const handleCoordinateClick = async (
-    x: number,
-    y: number,
-    dimensions: { width: number; height: number }
-  ) => {
-    console.log(`Clicked at original coordinates: X=${x}, Y=${y}`);
-    // ask /waldo/:waldoId?x=...&y=... to check if Waldo is there
-    const response = await fetch(`/api/waldo/${id}/validate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ x, y, ...dimensions }),
-    });
-    const data = await response.json();
-    if (data.found) {
-      console.log("Waldo found at:", data.found);
-    } else {
-      console.log("Waldo not found. Try again!");
-    }
-  };
-
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
       {/* Header with Back Button */}
@@ -60,11 +38,7 @@ export default function WaldoChallenge() {
       {/* Game Area */}
       <div className="flex-1 flex justify-center items-center p-6">
         <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-2xl shadow-rose-500/10 max-w-6xl max-h-full">
-          <WaldoImage
-            src={imageUrl}
-            alt="Where's Waldo board"
-            onCoordinateClick={handleCoordinateClick}
-          />
+          <WaldoImage src={imageUrl} alt={title} waldoId={id} />
         </div>
       </div>
     </div>
