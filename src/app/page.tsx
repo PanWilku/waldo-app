@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import PlayHeader from "@/components/PlayHeader";
 import { WaldoImage } from "@/types/dbTypes";
 
 export default async function Home() {
@@ -15,14 +16,7 @@ export default async function Home() {
     <div className="container min-h-screen p-6">
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-12">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-lg">
-            🔍 Where&apos;s Waldo Game
-          </h1>
-          <p className="text-lg text-gray-300">
-            Choose a puzzle and find Waldo hidden in the scene!
-          </p>
-        </div>
+        <PlayHeader />
 
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 [grid-auto-rows:minmax(0,1fr)]">

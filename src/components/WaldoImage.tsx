@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, MouseEvent } from "react";
 import { useWaldoGame } from "@/contexts/WaldoGameContext";
 
 interface WaldoImageProps {
@@ -36,11 +36,23 @@ export default function WaldoImage({
   >([]);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [zoomable, setZoomable] = useState(false);
 
   const [circleDimensions, setCircleDimensions] = useState({
     diameter: 50,
     radius: 25,
   });
+
+  const [position, setPosition] = useState({
+    x: 100,
+    y: 100,
+    mouseX: 0,
+    mouseY: 0,
+  });
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+
+  const MAGNIFIER_SIZE = 100;
+  const ZOOM_LEVEL = 2.5;
 
   useEffect(() => {
     const positionMap: Record<number, number> = {
@@ -163,13 +175,59 @@ export default function WaldoImage({
     }
   };
 
+  const handleMouseEnter = (e: MouseEvent<HTMLImageElement>) => {
+    if (!imageRef.current) return;
+    const element = imageRef.current;
+    const { width, height } = element.getBoundingClientRect();
+    setImageSize({ width, height });
+    updatePosition(e);
+  };
+
+  const handleMouseMove = (e: MouseEvent<HTMLImageElement>) => {
+    updatePosition(e);
+  };
+
+  const updatePosition = (e: MouseEvent<HTMLImageElement>) => {
+    if (!imageRef.current) return;
+    const rect = imageRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setPosition({
+      x: -x * ZOOM_LEVEL + MAGNIFIER_SIZE / 2,
+      y: -y * ZOOM_LEVEL + MAGNIFIER_SIZE / 2,
+      mouseX: x - MAGNIFIER_SIZE / 2,
+      mouseY: y - MAGNIFIER_SIZE / 2,
+    });
+  };
+
+  const handleZoomToggle = () => {
+    setZoomable(!zoomable);
+  };
+
   return (
     <>
       <div className="relative">
+        <button
+          onClick={() => handleZoomToggle()}
+          className="absolute top-0 right-0 p-2 border-1 m-1 rounded-lg bg-gray-600 text-white z-20 cursor-pointer hover:bg-gray-800"
+        >
+          Zoom Toggle {zoomable ? "On" : "Off"}
+        </button>
+
         <Image
           ref={imageRef}
-          onClick={handleClick}
+          onClick={
+            !zoomable
+              ? handleClick
+              : showTemporaryMessage.bind(
+                  null,
+                  "🔍 Turn off the zoom to click!"
+                )
+          }
           onLoad={handleImageLoad}
+          onMouseEnter={handleMouseEnter}
+          onMouseMove={handleMouseMove}
           src={src}
           alt={alt}
           width={800}
@@ -179,27 +237,46 @@ export default function WaldoImage({
           }`}
           priority
         />
+        {zoomable && (
+          <div
+            style={{
+              backgroundPosition: `${position.x}px ${position.y}px`,
+              backgroundImage: `url(${src})`,
+              backgroundSize: `${imageSize.width * ZOOM_LEVEL}px ${
+                imageSize.height * ZOOM_LEVEL
+              }px`,
+              backgroundRepeat: "no-repeat",
+              display: zoomable ? "block" : "none",
+              top: `${position.mouseY}px`,
+              left: `${position.mouseX}px`,
+              width: `${MAGNIFIER_SIZE}px`,
+              height: `${MAGNIFIER_SIZE}px`,
+            }}
+            className={`z-10 border-4 rounded-full pointer-events-none absolute border-gray-500 w-32 h-32`}
+          />
+        )}
 
         {/* Red circles for clicks */}
-        {wrongClickPositions.map((position) => (
-          <div
-            key={position.id}
-            className="absolute pointer-events-none z-50"
-            style={{
-              left: position.x - circleDimensions.radius,
-              top: position.y - circleDimensions.radius,
-              width: circleDimensions.diameter,
-              height: circleDimensions.diameter,
-            }}
-          >
-            {/* Animated pulse circle */}
-            <div className="w-full h-full bg-red-500 rounded-full opacity-90"></div>
-            {/* Static filled circle */}
-            <div className="absolute inset-2 bg-red-600 rounded-full opacity-60"></div>
-            {/* Border circle */}
-            <div className="absolute inset-0 border-4 border-red-400 rounded-full"></div>
-          </div>
-        ))}
+        {!zoomable &&
+          wrongClickPositions.map((position) => (
+            <div
+              key={position.id}
+              className="absolute pointer-events-none z-50"
+              style={{
+                left: position.x - circleDimensions.radius,
+                top: position.y - circleDimensions.radius,
+                width: circleDimensions.diameter,
+                height: circleDimensions.diameter,
+              }}
+            >
+              {/* Animated pulse circle */}
+              <div className="w-full h-full bg-red-500 rounded-full opacity-90"></div>
+              {/* Static filled circle */}
+              <div className="absolute inset-2 bg-red-600 rounded-full opacity-60"></div>
+              {/* Border circle */}
+              <div className="absolute inset-0 border-4 border-red-400 rounded-full"></div>
+            </div>
+          ))}
 
         {foundClickPositions.map((position) => (
           <div
