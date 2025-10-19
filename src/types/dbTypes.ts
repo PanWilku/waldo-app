@@ -5,4 +5,5 @@ export type WaldoImage = {
   createdAt: string;
   waldoSpots: JSON;
   level: number;
+  description: string;
 };

@@ -47,11 +47,11 @@ export async function POST(
     if (!spot || !spot.x || !spot.y) continue;
 
     const toleranceMap: Record<number, number> = {
-      1: 20,
-      2: 15,
-      3: 10,
-      4: 5,
-      5: 5,
+      1: 25,
+      2: 25,
+      3: 20,
+      4: 15,
+      5: 10,
     };
 
     const tolerance = toleranceMap[waldoImageRecord.level] || 15;

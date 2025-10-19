@@ -45,10 +45,10 @@ export default function WaldoImage({
   useEffect(() => {
     const positionMap: Record<number, number> = {
       1: 50,
-      2: 35,
-      3: 25,
-      4: 15,
-      5: 5,
+      2: 50,
+      3: 35,
+      4: 25,
+      5: 10,
     };
 
     const diameter = positionMap[level] ?? 50;

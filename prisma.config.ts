@@ -6,9 +6,9 @@ import type { PrismaConfig } from "prisma";
 dotenvConfig();
 
 const config: PrismaConfig = {
-  schema: path.join("db", "prisma", "schema.prisma"),
+  schema: path.join("prisma", "schema.prisma"),
   migrations: {
-    path: path.join("db", "prisma", "migrations"),
+    path: path.join("prisma", "migrations"),
   },
   // If you set custom generator options in it, or custom adapter, etc.
 };

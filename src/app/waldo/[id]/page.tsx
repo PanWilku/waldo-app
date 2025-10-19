@@ -16,7 +16,7 @@ function WaldoGameContent() {
   const id = params.id as string;
   const title = searchParams.get("title") || "Waldo Challenge";
   const imageUrl = searchParams.get("url") || "/waldo1.jpg";
-  const level = searchParams.get("level") || "1";
+  const level = parseInt(searchParams.get("level") || "1", 10);
 
   console.log("Received data:", { id, title, imageUrl });
 

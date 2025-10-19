@@ -126,7 +126,8 @@ exports.Prisma.WaldoImageScalarFieldEnum = {
   title: 'title',
   createdAt: 'createdAt',
   waldoSpots: 'waldoSpots',
-  level: 'level'
+  level: 'level',
+  description: 'description'
 };
 
 exports.Prisma.SortOrder = {

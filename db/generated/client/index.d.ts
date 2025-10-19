@@ -888,6 +888,7 @@ export namespace Prisma {
     title: string | null
     createdAt: Date | null
     level: number | null
+    description: string | null
   }
 
   export type WaldoImageMaxAggregateOutputType = {
@@ -896,6 +897,7 @@ export namespace Prisma {
     title: string | null
     createdAt: Date | null
     level: number | null
+    description: string | null
   }
 
   export type WaldoImageCountAggregateOutputType = {
@@ -905,6 +907,7 @@ export namespace Prisma {
     createdAt: number
     waldoSpots: number
     level: number
+    description: number
     _all: number
   }
 
@@ -925,6 +928,7 @@ export namespace Prisma {
     title?: true
     createdAt?: true
     level?: true
+    description?: true
   }
 
   export type WaldoImageMaxAggregateInputType = {
@@ -933,6 +937,7 @@ export namespace Prisma {
     title?: true
     createdAt?: true
     level?: true
+    description?: true
   }
 
   export type WaldoImageCountAggregateInputType = {
@@ -942,6 +947,7 @@ export namespace Prisma {
     createdAt?: true
     waldoSpots?: true
     level?: true
+    description?: true
     _all?: true
   }
 
@@ -1038,6 +1044,7 @@ export namespace Prisma {
     createdAt: Date
     waldoSpots: JsonValue
     level: number
+    description: string
     _count: WaldoImageCountAggregateOutputType | null
     _avg: WaldoImageAvgAggregateOutputType | null
     _sum: WaldoImageSumAggregateOutputType | null
@@ -1066,6 +1073,7 @@ export namespace Prisma {
     createdAt?: boolean
     waldoSpots?: boolean
     level?: boolean
+    description?: boolean
   }, ExtArgs["result"]["waldoImage"]>
 
   export type WaldoImageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1075,6 +1083,7 @@ export namespace Prisma {
     createdAt?: boolean
     waldoSpots?: boolean
     level?: boolean
+    description?: boolean
   }, ExtArgs["result"]["waldoImage"]>
 
   export type WaldoImageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1084,6 +1093,7 @@ export namespace Prisma {
     createdAt?: boolean
     waldoSpots?: boolean
     level?: boolean
+    description?: boolean
   }, ExtArgs["result"]["waldoImage"]>
 
   export type WaldoImageSelectScalar = {
@@ -1093,9 +1103,10 @@ export namespace Prisma {
     createdAt?: boolean
     waldoSpots?: boolean
     level?: boolean
+    description?: boolean
   }
 
-  export type WaldoImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "url" | "title" | "createdAt" | "waldoSpots" | "level", ExtArgs["result"]["waldoImage"]>
+  export type WaldoImageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "url" | "title" | "createdAt" | "waldoSpots" | "level" | "description", ExtArgs["result"]["waldoImage"]>
 
   export type $WaldoImagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "WaldoImage"
@@ -1107,6 +1118,7 @@ export namespace Prisma {
       createdAt: Date
       waldoSpots: Prisma.JsonValue
       level: number
+      description: string
     }, ExtArgs["result"]["waldoImage"]>
     composites: {}
   }
@@ -1536,6 +1548,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"WaldoImage", 'DateTime'>
     readonly waldoSpots: FieldRef<"WaldoImage", 'Json'>
     readonly level: FieldRef<"WaldoImage", 'Int'>
+    readonly description: FieldRef<"WaldoImage", 'String'>
   }
     
 
@@ -1922,7 +1935,8 @@ export namespace Prisma {
     title: 'title',
     createdAt: 'createdAt',
     waldoSpots: 'waldoSpots',
-    level: 'level'
+    level: 'level',
+    description: 'description'
   };
 
   export type WaldoImageScalarFieldEnum = (typeof WaldoImageScalarFieldEnum)[keyof typeof WaldoImageScalarFieldEnum]
@@ -2048,6 +2062,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"WaldoImage"> | Date | string
     waldoSpots?: JsonFilter<"WaldoImage">
     level?: IntFilter<"WaldoImage"> | number
+    description?: StringFilter<"WaldoImage"> | string
   }
 
   export type WaldoImageOrderByWithRelationInput = {
@@ -2057,6 +2072,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     waldoSpots?: SortOrder
     level?: SortOrder
+    description?: SortOrder
   }
 
   export type WaldoImageWhereUniqueInput = Prisma.AtLeast<{
@@ -2069,6 +2085,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"WaldoImage"> | Date | string
     waldoSpots?: JsonFilter<"WaldoImage">
     level?: IntFilter<"WaldoImage"> | number
+    description?: StringFilter<"WaldoImage"> | string
   }, "id">
 
   export type WaldoImageOrderByWithAggregationInput = {
@@ -2078,6 +2095,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     waldoSpots?: SortOrder
     level?: SortOrder
+    description?: SortOrder
     _count?: WaldoImageCountOrderByAggregateInput
     _avg?: WaldoImageAvgOrderByAggregateInput
     _max?: WaldoImageMaxOrderByAggregateInput
@@ -2095,6 +2113,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"WaldoImage"> | Date | string
     waldoSpots?: JsonWithAggregatesFilter<"WaldoImage">
     level?: IntWithAggregatesFilter<"WaldoImage"> | number
+    description?: StringWithAggregatesFilter<"WaldoImage"> | string
   }
 
   export type WaldoImageCreateInput = {
@@ -2103,6 +2122,7 @@ export namespace Prisma {
     createdAt?: Date | string
     waldoSpots: JsonNullValueInput | InputJsonValue
     level?: number
+    description?: string
   }
 
   export type WaldoImageUncheckedCreateInput = {
@@ -2112,6 +2132,7 @@ export namespace Prisma {
     createdAt?: Date | string
     waldoSpots: JsonNullValueInput | InputJsonValue
     level?: number
+    description?: string
   }
 
   export type WaldoImageUpdateInput = {
@@ -2120,6 +2141,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     waldoSpots?: JsonNullValueInput | InputJsonValue
     level?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type WaldoImageUncheckedUpdateInput = {
@@ -2129,6 +2151,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     waldoSpots?: JsonNullValueInput | InputJsonValue
     level?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type WaldoImageCreateManyInput = {
@@ -2138,6 +2161,7 @@ export namespace Prisma {
     createdAt?: Date | string
     waldoSpots: JsonNullValueInput | InputJsonValue
     level?: number
+    description?: string
   }
 
   export type WaldoImageUpdateManyMutationInput = {
@@ -2146,6 +2170,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     waldoSpots?: JsonNullValueInput | InputJsonValue
     level?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type WaldoImageUncheckedUpdateManyInput = {
@@ -2155,6 +2180,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     waldoSpots?: JsonNullValueInput | InputJsonValue
     level?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -2224,6 +2250,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     waldoSpots?: SortOrder
     level?: SortOrder
+    description?: SortOrder
   }
 
   export type WaldoImageAvgOrderByAggregateInput = {
@@ -2237,6 +2264,7 @@ export namespace Prisma {
     title?: SortOrder
     createdAt?: SortOrder
     level?: SortOrder
+    description?: SortOrder
   }
 
   export type WaldoImageMinOrderByAggregateInput = {
@@ -2245,6 +2273,7 @@ export namespace Prisma {
     title?: SortOrder
     createdAt?: SortOrder
     level?: SortOrder
+    description?: SortOrder
   }
 
   export type WaldoImageSumOrderByAggregateInput = {

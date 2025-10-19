@@ -98,7 +98,8 @@ exports.Prisma.WaldoImageScalarFieldEnum = {
   title: 'title',
   createdAt: 'createdAt',
   waldoSpots: 'waldoSpots',
-  level: 'level'
+  level: 'level',
+  description: 'description'
 };
 
 exports.Prisma.SortOrder = {
@@ -150,14 +151,14 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\marci\\Desktop\\ReactProject\\waldo-app\\db\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\marci\\Desktop\\ReactProject\\waldo-app\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
-  "relativePath": "../../prisma",
+  "relativePath": "../../../prisma",
   "clientVersion": "6.17.1",
   "engineVersion": "272a37d34178c2894197e17273bf937f25acdeac",
   "datasourceNames": [
@@ -173,13 +174,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel WaldoImage {\n  id         Int      @id @default(autoincrement())\n  url        String\n  title      String   @default(\"untitled\")\n  createdAt  DateTime @default(now())\n  waldoSpots Json\n  level      Int      @default(1)\n}\n",
-  "inlineSchemaHash": "2fcd0492a5eda1b54fb6e83d13e396321fdbf62773d4d814b5f2639195ccc4e3",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../db/generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel WaldoImage {\n  id          Int      @id @default(autoincrement())\n  url         String\n  title       String   @default(\"untitled\")\n  createdAt   DateTime @default(now())\n  waldoSpots  Json\n  level       Int      @default(1)\n  description String   @default(\"No description provided\")\n}\n",
+  "inlineSchemaHash": "4e119cda00e0e87eb6697fc3bcbe06210888bfd1dba7e0515bb5ffeeea51ee7a",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"WaldoImage\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"waldoSpots\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"level\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"WaldoImage\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"waldoSpots\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"level\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

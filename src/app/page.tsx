@@ -76,7 +76,7 @@ export default async function Home() {
                           {image.title}
                         </h3>
                         <p className="text-gray-400 text-sm mb-4 h-full">
-                          Can you spot Waldo in this challenging scene?
+                          {image.description}
                         </p>
                       </div>
 
