@@ -16,6 +16,7 @@ function WaldoGameContent() {
   const id = params.id as string;
   const title = searchParams.get("title") || "Waldo Challenge";
   const imageUrl = searchParams.get("url") || "/waldo1.jpg";
+  const level = searchParams.get("level") || "1";
 
   console.log("Received data:", { id, title, imageUrl });
 
@@ -51,7 +52,7 @@ function WaldoGameContent() {
       {/* Game Area with Success Dialog Overlay */}
       <div className="flex-1 flex justify-center items-center p-6 relative">
         <div className="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-2xl shadow-rose-500/10 max-w-6xl max-h-full">
-          <WaldoImage src={imageUrl} alt={title} waldoId={id} />
+          <WaldoImage src={imageUrl} alt={title} waldoId={id} level={level} />
         </div>
 
         {/* Success Dialog positioned over the game */}

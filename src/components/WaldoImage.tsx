@@ -8,9 +8,15 @@ interface WaldoImageProps {
   src: string;
   alt: string;
   waldoId: string;
+  level: number;
 }
 
-export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
+export default function WaldoImage({
+  src,
+  alt,
+  waldoId,
+  level,
+}: WaldoImageProps) {
   const imageRef = useRef<HTMLImageElement>(null);
   const {
     showTemporaryMessage,
@@ -30,6 +36,27 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
   >([]);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [circleDimensions, setCircleDimensions] = useState({
+    diameter: 50,
+    radius: 25,
+  });
+
+  useEffect(() => {
+    const positionMap: Record<number, number> = {
+      1: 50,
+      2: 35,
+      3: 25,
+      4: 15,
+      5: 5,
+    };
+
+    const diameter = positionMap[level] ?? 50;
+    setCircleDimensions({
+      diameter,
+      radius: diameter / 2,
+    });
+  }, [level]);
 
   // Reset circles when game is reset
   const resetCircles = () => {
@@ -159,10 +186,10 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
             key={position.id}
             className="absolute pointer-events-none z-50"
             style={{
-              left: position.x - 25,
-              top: position.y - 25,
-              width: "50px",
-              height: "50px",
+              left: position.x - circleDimensions.radius,
+              top: position.y - circleDimensions.radius,
+              width: circleDimensions.diameter,
+              height: circleDimensions.diameter,
             }}
           >
             {/* Animated pulse circle */}
@@ -179,10 +206,10 @@ export default function WaldoImage({ src, alt, waldoId }: WaldoImageProps) {
             key={position.id}
             className="absolute pointer-events-none z-50"
             style={{
-              left: position.x - 25,
-              top: position.y - 25,
-              width: "50px",
-              height: "50px",
+              left: position.x - circleDimensions.radius,
+              top: position.y - circleDimensions.radius,
+              width: circleDimensions.diameter,
+              height: circleDimensions.diameter,
             }}
           >
             {/* Animated pulse circle */}

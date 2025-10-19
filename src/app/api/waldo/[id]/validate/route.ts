@@ -1,6 +1,6 @@
 // app/api/waldo/[id]/route.ts
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@db/prisma/generated/prisma";
+import { PrismaClient } from "@db/generated/client/index.js";
 
 const prisma = new PrismaClient();
 
@@ -16,7 +16,7 @@ export async function POST(
 
   const waldoImageRecord = await prisma.waldoImage.findUnique({
     where: { id: Number(id) },
-    select: { waldoSpots: true },
+    select: { waldoSpots: true, level: true },
   });
 
   // Handle case where image is not found
@@ -46,7 +46,21 @@ export async function POST(
     // Additional null check for the spot
     if (!spot || !spot.x || !spot.y) continue;
 
-    if (x >= spot.x[0] && x <= spot.x[1] && y >= spot.y[0] && y <= spot.y[1]) {
+    const toleranceMap: Record<number, number> = {
+      1: 20,
+      2: 15,
+      3: 10,
+      4: 5,
+      5: 5,
+    };
+
+    const tolerance = toleranceMap[waldoImageRecord.level] || 15;
+    if (
+      x >= spot.x[0] - tolerance &&
+      x <= spot.x[1] + tolerance &&
+      y >= spot.y[0] - tolerance &&
+      y <= spot.y[1] + tolerance
+    ) {
       const found = { message: `You found Waldo!`, score: 1 };
       console.log(found);
       return NextResponse.json({ found });
