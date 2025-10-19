@@ -24,7 +24,7 @@ export default function HowToPlayDialog({ position }: HowToPlayDialogProps) {
           className="rounded-md border border-gray-300"
         />
         <ul className="list-disc list-inside space-y-1 self-start">
-          <li>Choose your desired level</li>
+          <li>Choose your desired level.</li>
           <li>After you click, a red circle will appear marking your guess.</li>
           <li>
             Use the zoom toggle for a closer look, but remember you cant click

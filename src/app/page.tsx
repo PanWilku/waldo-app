@@ -2,15 +2,21 @@ import Link from "next/link";
 import Image from "next/image";
 import PlayHeader from "@/components/PlayHeader";
 import { WaldoImage } from "@/types/dbTypes";
+import { PrismaClient } from "@db/generated/client";
+
+const prisma = new PrismaClient();
+
+async function getImages() {
+  const images = await prisma.waldoImage.findMany();
+  return { images };
+}
 
 export default async function Home() {
-  const baseUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+  const data = await getImages();
 
-  const data = await fetch(`${baseUrl}/api/getWaldoImage`).then((res) =>
-    res.json()
+  const images = data.images.sort(
+    (a: WaldoImage, b: WaldoImage) => a.level - b.level
   );
-
-  const images = data.images;
   let i = 0;
   return (
     <div className="container min-h-screen p-6">
